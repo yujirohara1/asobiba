@@ -1,0 +1,33 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-12
+      %div(style="float:left; padding-right:30px")
+        <header class="pb-3 mb-4 border-bottom">
+          <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+            %span.fs-4(style="font-weight:bold; font-size:2rem !Important")
+              <i class="bi bi-stack" style="padding-right:10px"></i>
+              Kiyonagi Sandbox
+          </a>
+        </header>
+
+      %div(style="float:left; padding-right:130px")
+        %div#divLblWelcomeMessage(style="top:10px; position:relative")
+          aaa
+          
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/holidays/lib/japanese-holidays.min.js"></script>
+  <script src="../static/main/js/constants.js"></script>
+  <script src="../static/main/js/main.js"></script>
+  <script src="../static/main/js/introduction.js"></script>
+
+{% endblock  %}
+
+
