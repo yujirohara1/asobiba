@@ -1,0 +1,24 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %h1
+    %span#badgeStatus
+        {{ status }}
+  %div.row
+    %div.col-12
+      %table.table#simpleTable
+
+%div#responseJson(hidden)
+  {{ responseJson }}
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/loginAtGoogleAuth.js"></script>
+
+{% endblock  %}
+
+
