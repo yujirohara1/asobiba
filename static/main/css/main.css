@@ -530,7 +530,7 @@ table.dataTable thead tr {
 }
 
 .loading-ss {
-    background-image: url(../../../static/image/loading_ss.gif) !important;
+    background-image: url(../../../static/image/orgloading_ss.gif) !important;
     background-repeat: no-repeat;
     z-index: 9999;
     text-align: center;

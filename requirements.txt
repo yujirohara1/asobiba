@@ -40,3 +40,4 @@ google-auth-httplib2==0.1.0
 google-auth-oauthlib==0.8.0
 googleapis-common-protos==1.58.0
 oauthlib==3.2.2
+openai==0.27.2

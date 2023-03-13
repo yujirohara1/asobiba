@@ -1,0 +1,56 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      %select#selecTone.form-select(aria-label="Default select example")
+        %option(selected value=0)
+          gpt3に設定する口調を選択してください。
+        %option(value=1)
+          強い口調
+        %option(value=2)
+          小学生に教えるような口調
+        %option(value=3)
+        　丁寧な口調
+        %option(value=4)
+          遜った口調
+        %option(value=5)
+          横柄な口調
+        %option(value=6)
+          人を子馬鹿にした口調
+        %option(value=7)
+          支離滅裂な口調
+  %hr
+  %div.row
+    %div.col-auto
+      文章を入力して会話を始めてください。
+  %div.row
+    %div.col-12
+      %textarea.form-control#userQuestion(rows=10)
+  %div.row
+    %div.col-auto
+      %button#btnSend.btn.btn-primary(type="button")
+        送信
+  %hr
+  %div.row
+    %div.col-auto#divSubTitleAnswer
+      回答
+    %div.col-auto#divThinking
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  %div.row
+    %div.col-12
+      %textarea.form-control#gptAnswer(rows=10 disabled)
+
+
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/gpt3AtOpenAIApi.js"></script>
+
+{% endblock  %}
+
+

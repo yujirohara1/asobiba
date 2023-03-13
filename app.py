@@ -29,6 +29,9 @@ import pathlib
 
 from oauthlib.oauth2 import WebApplicationClient
 
+import openai
+
+
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
         extensions=[HamlishExtension]
@@ -41,6 +44,8 @@ login_manager.init_app(app)
 
 app.secret_key = "kiyonagi.herokuapp.com"
 
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
 # 設定情報
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
@@ -48,6 +53,8 @@ GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 @app.route("/favicon.ico")
 def favicon():
@@ -59,6 +66,38 @@ def load_user(user_id):
   return users.get(int(user_id))
 
 
+
+
+# gpt3 api 
+@app.route('/gpt3AtOpenAIApi', methods=["GET"])
+def openWindowGpt3AtOpenAIApi():
+    return render_template("gpt3AtOpenAIApi.haml")
+
+
+
+# gpt3 api 
+@app.route('/sendMessageAndGetAnswer/<message>/<tone>')
+def sendMessageAndGetAnswer(message, tone):
+    response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    max_tokens=100,
+    messages=[
+        {"role": "system", "content": tone + "で回答してください。"},
+        {"role": "user", "content": message},
+    ],
+    )
+
+    answer = response.choices[0]["message"]["content"].strip()
+    tmp = {}
+    tmp['aaData']=[]
+    tmp["aaData"].append( \
+      {"answer":answer} 
+    )
+    return json.dumps(tmp, skipkeys=True, ensure_ascii=False)
+
+
+
+# GoogleOAuth 
 @app.route('/loginAtGoogleAuth', methods=["GET"])
 def openWindowLoginAtGoogleAuth():
     return render_template("loginAtGoogleAuth.haml")
@@ -89,10 +128,6 @@ def startLoginAtGoogleAuth():
     
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
-
-
-
-
 
 @app.route("/startLoginAtGoogleAuth/callback")
 def callback():
@@ -147,7 +182,6 @@ def callback():
     return render_template("loginAtGoogleAuth.haml",status=status, responseJson=json.dumps(tmp,ensure_ascii=False))
 
 
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 # ルートパス
 @app.route('/', methods=["GET", "POST"])
