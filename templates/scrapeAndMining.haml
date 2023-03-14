@@ -1,0 +1,36 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      %button.btn.btn-warning#btnStart
+        形態素解析を始める
+  %hr
+  %div.row#divTableWrapper(style="height:300px; overflow-y:scroll")
+    %table.table#simpleTable
+  %hr
+  %div.row(style="padding-top:20px")
+    %div.col-auto
+      頻出単語リスト 上位50件
+
+  %div.row#divTableWrapperB(style="height:300px; overflow-y:scroll")
+    %table.table#rankTable
+      %thead
+        %th
+          単語
+        %th
+          出現回数
+      %tbody#rankTableBody
+
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/scrapeAndMining.js"></script>
+
+{% endblock  %}
+
+

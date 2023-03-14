@@ -9,3 +9,7 @@ document.getElementById("linkLoginAtGoogleAuth").addEventListener('click', funct
 document.getElementById("linkGpt3AtOpenAIApi").addEventListener('click', function(){
   window.open('/gpt3AtOpenAIApi');
 });
+
+document.getElementById("linkScrapeAndMining").addEventListener('click', function(){
+  window.open('/scrapeAndMining');
+});

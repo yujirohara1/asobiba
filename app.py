@@ -54,7 +54,7 @@ GOOGLE_DISCOVERY_URL = (
 )
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
 
 @app.route("/favicon.ico")
 def favicon():
@@ -68,14 +68,104 @@ def load_user(user_id):
 
 
 
+# scrapeAndMining
+@app.route('/scrapeAndMining', methods=["GET"])
+def openWindowScrapeAndMining():
+    return render_template("scrapeAndMining.haml")
+
+
+@app.route('/getMiningResult/<id>')
+def getMiningResult(id):
+    
+    res = requests.get('http://kiyonagi.jp/?p=' + str(id))
+    soup = BeautifulSoup(res.text, 'html.parser')
+    c_word = ""
+    if soup.find(class_="post-full post-full-summary") is not None:
+    #     title_text = soup.find(class_='entry-title').get_text()
+        body_text = soup.find(class_='entry-content').get_text()
+        #     cate_text = soup.find(class_='cat-links').get_text()
+        #     date_text = ""
+        #     if soup.find(class_='entry-date') is not None:
+        #       date_text = formatDate(soup.find(class_='entry-date').get_text())
+
+        #     # 文字の整形（改行削除）
+        text = "".join(body_text.splitlines())
+
+        # 単語ごとに抽出
+        docs=[]
+        t = Tokenizer()
+        tokens = t.tokenize(text)
+        for token in tokens:
+            if len(token.base_form) > 2:
+                docs.append(token.surface)
+        
+        c_word = ' '.join(docs)
+    
+    #     filepath = ''
+    #     filename = ''
+    #     if c_word != '':
+    #       wordcloud = WordCloud(background_color='white',
+    #                           font_path='NotoSansJP-Regular.otf',
+    #                           width=800, height=400).generate(c_word)
+    #       ## 結果を画像に保存
+    #       timestamp = datetime.datetime.now()
+    #       timestampStr = timestamp.strftime('%Y%m%d%H%M%S%f')
+    #       filename = "wordcloud_" + timestampStr + "_" + kijiId + ".png"
+    #       filepath = "./static/image/" + filename
+    #       wordcloud.to_file(filepath)
+
+    #     dictId["aaData"].append( \
+    #       {"id":kijiId, \
+    #         "title":title_text.replace("\n",""), \
+    #         "kaiseki": c_word, \
+    #           "filepath": filename, \
+    #           "category": cate_text.replace("\n",""), \
+    #             "tokoDate": date_text, \
+    #               "honbun": body_text.replace("\n","")} 
+    #         )
+    #   # kijiId+=1
+
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append( \
+        {
+            "words": c_word
+        } 
+    )
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+@app.route('/tryScrapeTop')
+def tryScrapeTop():
+
+    dictId = {}
+    dictId['aaData']=[]
+
+    #res = requests.get('http://kiyonagi.jp/?p=' + str(kijiId))
+    res = requests.get('http://kiyonagi.jp/')
+    soup = BeautifulSoup(res.text, 'html.parser')
+
+    for article in soup.find_all('article'):
+        # post-5003
+        tmpArr = article.attrs.get("id").split("-")
+        if len(tmpArr) == 2:
+            dictId["aaData"].append( \
+                {
+                    "id":tmpArr[1], \
+                    "title": article.find(class_="entry-title").find("a").contents[0]
+                } 
+            )
+
+
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
+
+
 # gpt3 api 
 @app.route('/gpt3AtOpenAIApi', methods=["GET"])
 def openWindowGpt3AtOpenAIApi():
     return render_template("gpt3AtOpenAIApi.haml")
 
-
-
-# gpt3 api 
 @app.route('/sendMessageAndGetAnswer/<message>/<tone>')
 def sendMessageAndGetAnswer(message, tone):
     response = openai.ChatCompletion.create(
