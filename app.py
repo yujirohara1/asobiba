@@ -40,6 +40,10 @@ from models.feed import Feed, FeedSchema
 from decimal import Decimal
 
 import platform
+import cv2
+import random
+import numpy as np
+from matplotlib import pyplot as plt
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -86,6 +90,64 @@ def load_user(user_id):
   return users.get(int(user_id))
 
 
+
+
+# gettingStartOpenCV
+@app.route('/gettingStartOpenCV', methods=["GET"])
+def openWindowGettingStartOpenCV():
+    return render_template("gettingStartOpenCV.haml")
+
+@app.route('/showOriginalImage', methods=["GET"])
+def returnOriginalImageBlob():
+    imgPath = 'static/image/pakira.png'
+    return send_file(imgPath, as_attachment=True, mimetype='image/png', attachment_filename = 'pakira.png')
+
+@app.route('/showModifyImage/<method>', methods=["GET"])
+def returnModifyImageBlob(method):
+    returnFilenm = getRandomKey()
+    imgPath = 'static/image/pakira.png'
+    if method == "grayscale":
+        imgBlob = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE)
+        cv2.imwrite("tmp/" + returnFilenm + ".png", imgBlob)
+
+    if method == "blackWhite":
+        imgTmp = cv2.imread(imgPath, 0)
+        ret, imgBlob = cv2.threshold(imgTmp, 0, 255, cv2.THRESH_OTSU)
+        cv2.imwrite("tmp/" + returnFilenm + ".png", imgBlob)
+
+    if method == "resizeHarf":
+        imgTmp = cv2.imread(imgPath)
+        #ret, imgBlob = cv2.threshold(imgTmp, 0, 255, cv2.THRESH_OTSU)
+        imgBlob = cv2.resize(imgTmp, dsize=None, fx=0.5, fy=0.5)
+        cv2.imwrite("tmp/" + returnFilenm + ".png", imgBlob)
+
+    if method == "contours":
+        imgTmp = cv2.imread(imgPath)
+        imgray = cv2.cvtColor(imgTmp,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray,88,255,0)
+        contours, hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        imgBlob = cv2.drawContours(imgTmp, contours, -1, (0,0,255), 3)
+        cv2.imwrite("tmp/" + returnFilenm + ".png", imgBlob)
+ 
+    if method == "cannyEdge":
+        imgTmp = cv2.imread(imgPath)
+        imgBlob = cv2.Canny(imgTmp,100,200)
+        cv2.imwrite("tmp/" + returnFilenm + ".png", imgBlob)
+
+    if method == "histgram":
+        imgTmp = cv2.imread(imgPath)
+        color = ('b','g','r')
+        for i,col in enumerate(color):
+            histr = cv2.calcHist([imgTmp],[i],None,[256],[0,256])
+            plt.plot(histr,color = col)
+            plt.xlim([0,256])
+        a = 1
+        plt.savefig("tmp/" + returnFilenm + ".png") 
+
+    return send_file("tmp/" + returnFilenm + ".png", as_attachment=True, mimetype='image/png', attachment_filename = returnFilenm + ".png")
+
+def getRandomKey():
+   return datetime.datetime.now().strftime('%Y%m%d%H%M%S%f') + "_" + str(random.randint(1, 9999999999999999))
 
 
 # showHerokuPlatform

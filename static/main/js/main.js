@@ -22,4 +22,8 @@ document.getElementById("linkShowHerokuPlatform").addEventListener('click', func
   window.open('/showHerokuPlatform');
 });
 
+document.getElementById("linkGettingStartOpenCV").addEventListener('click', function(){
+  window.open('/gettingStartOpenCV');
+});
+
 

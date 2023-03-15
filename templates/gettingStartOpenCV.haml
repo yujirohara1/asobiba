@@ -1,0 +1,58 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      OpenCVで画像を加工する
+  %hr
+  %div.row
+    %div.col-auto
+      %div.row
+        %div.col-auto
+          加工に用いるオリジナル画像
+      %div.row
+        %div.col-auto
+          %img#imgOriginalImage
+    %div.col-auto
+      %div.row
+        %div.col-auto
+          加工方法を選択
+        %div.col-auto
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessGrayscale(type="radio" name="radioProcess" value="grayscale")
+            %label.form-check-label(for="radioProcessGrayscale")
+              グレースケール
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessBlackWhite(type="radio" name="radioProcess" value="blackWhite")
+            %label.form-check-label(for="radioProcessBlackWhite")
+              白黒二値画像
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessBlackWhite(type="radio" name="radioProcess" value="resizeHarf")
+            %label.form-check-label(for="radioProcessResizeHarf")
+              リサイズ（50%縮小）
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessContours(type="radio" name="radioProcess" value="contours")
+            %label.form-check-label(for="radioProcessContours")
+              輪郭検出
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessCannyEdge(type="radio" name="radioProcess" value="cannyEdge")
+            %label.form-check-label(for="radioProcessCannyEdge")
+              Cannyエッジ抽出
+          %div.form-check.form-check-inline
+            %input.form-check-input#radioProcessHistgram(type="radio" name="radioProcess" value="histgram")
+            %label.form-check-label(for="radioProcessHistgram")
+              ヒストグラム
+      %div.row
+        %div.col-auto
+          %img#imgChangelImage
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/gettingStartOpenCV.js"></script>
+
+{% endblock  %}
+
+
