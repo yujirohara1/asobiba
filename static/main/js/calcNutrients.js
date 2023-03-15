@@ -49,7 +49,7 @@ function hoge(){
     var thB = document.createElement('th');
     thB.innerText = "量区分";
     var thC = document.createElement('th');
-    thC.innerText = "量";
+    thC.innerText = "基準量";
     thC.style.color = "blue";
     var thD = document.createElement('th');
     thD.innerText = "単位";
@@ -121,6 +121,10 @@ function createFeedTable(){
         chk.classList.add("me-1");
         chk.type = "checkbox";
         chk.value = list[i].feed_code;
+        chk.name = "feed";
+        chk.addEventListener('change', function() {
+          hoge2();
+        });
         //li.innerText = list[i].feed_name;
         li.appendChild(chk);
         li.appendChild( document.createTextNode(list[i].feed_name));
@@ -128,37 +132,72 @@ function createFeedTable(){
 
         tmpFeedCode = list[i].feed_code;
       }
-  }
-
-    
-//   <li class="">
-//     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-//     First checkbox
-//   </li>
-//   <li class="list-group-item">
-//     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-//     Second checkbox
-//   </li>
-//   <li class="list-group-item">
-//     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-//     Third checkbox
-//   </li>
-//   <li class="list-group-item">
-//     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-//     Fourth checkbox
-//   </li>
-//   <li class="list-group-item">
-//     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-//     Fifth checkbox
-//   </li>
-// </ul>
-
+    }
   })
   .catch(error => { 
     console.log(error)
   });
 
 }
+
+
+function hoge2(){
+  //var chkFeedList = document.getElementsByName("feed");
+  var argFeedCodes = "";
+  var chkFeedList = document.getElementById("ulFeedList").querySelectorAll('input')
+  chkFeedList.forEach(elem=>{
+      if(elem.checked){
+        argFeedCodes = argFeedCodes + elem.value + ",";
+      }
+  })
+  // for(let i in chkFeedList){
+  //   if(chkFeedList[i].checked){
+  //     argFeedCodes = argFeedCodes + chkFeedList[i].value + ",";
+  //   }
+  // }
+  argFeedCodes = argFeedCodes + "0";
+
+  fetch('/getSummaryAmount/'+ argFeedCodes, {
+    method: 'GET',
+    'Content-Type': 'application/json'
+  })
+  .then(res => res.json())
+  .then(jsonData => {
+    var list = JSON.parse(jsonData.data);
+    //alert(list);
+    var table = document.getElementById("simpleTable");
+    for(let i=0; i<table.rows.length; i++){
+      table.rows[i].cells[5].innerText = "";
+    }
+
+    for(let i=0; i<table.rows.length; i++){
+      for(let j in list){
+        if(table.rows[i].cells[0].innerText == list[j].nutrient_code){
+          table.rows[i].cells[5].innerText = list[j].amount;
+          var a = table.rows[i].cells[3].innerText*1;
+          var b = table.rows[i].cells[5].innerText*1;
+          if(table.rows[i].cells[5].innerText == ""){
+            b = 0;
+          }
+          
+          if(a < b){
+            table.rows[i].cells[5].style.color = "blue";
+            table.rows[i].cells[5].innerText = table.rows[i].cells[5].innerText + " 摂りすぎ！";
+          } else if(a > b){
+            table.rows[i].cells[5].style.color = "red";
+            table.rows[i].cells[5].innerText = table.rows[i].cells[5].innerText + " 足りない！";
+          } else {
+            table.rows[i].cells[5].style.color = "";
+          }
+        }
+      }
+    }
+  })
+  .catch(error => { 
+    console.log(error)
+  });
+}
+
 
 function convertEffect(eff){
   if(eff==""){

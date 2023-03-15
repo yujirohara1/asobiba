@@ -37,6 +37,7 @@ from sqlalchemy import distinct
 from sqlalchemy import asc
 from models.nutrientRule import NutrientRule, NutrientRuleSchema
 from models.feed import Feed, FeedSchema
+from decimal import Decimal
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -64,8 +65,8 @@ openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
 
 
 
-db_uri = "postgresql://postgres:yjrhr1102@localhost:5432/newdb3" #開発用
-# db_uri = os.environ.get('DATABASE_URL') #本番用
+# db_uri = "postgresql://postgres:yjrhr1102@localhost:5432/newdb3" #開発用
+db_uri = os.environ.get('DATABASE_URL') #本番用
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -103,6 +104,40 @@ def getNutrientRule(sex, age):
       ).all()
     datalist_schema = NutrientRuleSchema(many=True)
     return jsonify({'data': datalist_schema.dumps(datalist, ensure_ascii=False, default=decimal_default_proc)})
+
+@app.route('/getSummaryAmount/<feedCodes>')
+def getSummaryAmount(feedCodes):
+
+    sql = " "
+    sql = sql + "    select                                   " 
+    sql = sql + "        nutrient_code                        " 
+    sql = sql + "        , sum(amount) sum_amount             " 
+    sql = sql + "    from                                     " 
+    sql = sql + "        feed                                 " 
+    sql = sql + "    where                                    " 
+    sql = sql + "        feed_code in (" + feedCodes + ")   " 
+    sql = sql + "    group by                                 " 
+    sql = sql + "        nutrient_code                       " 
+    
+    resultset=[]
+    data_listA = None
+    exist = False
+    
+    if db.session.execute(text(sql)).fetchone() is not None:
+        data_listA = db.session.execute(text(sql))
+
+        if data_listA is not None:
+            for row in data_listA:
+                resultset.append(
+                    {
+                        "nutrient_code":row["nutrient_code"], 
+                        "amount":row["sum_amount"]
+                    }
+                )
+
+    # return jsonify({'data': resultset})
+    return jsonify({'data': json.dumps(resultset,default=decimal_default_proc)})
+
 
 @app.route('/getFeetList')
 def getFeetList():
