@@ -13,3 +13,9 @@ document.getElementById("linkGpt3AtOpenAIApi").addEventListener('click', functio
 document.getElementById("linkScrapeAndMining").addEventListener('click', function(){
   window.open('/scrapeAndMining');
 });
+
+document.getElementById("linkCalcNutrients").addEventListener('click', function(){
+  window.open('/calcNutrients');
+});
+
+

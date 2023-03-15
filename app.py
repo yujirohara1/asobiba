@@ -30,7 +30,13 @@ import pathlib
 from oauthlib.oauth2 import WebApplicationClient
 
 import openai
-
+from marshmallow_sqlalchemy import ModelSchema
+from api.database import db, ma
+from sqlalchemy.sql import text
+from sqlalchemy import distinct
+from sqlalchemy import asc
+from models.nutrientRule import NutrientRule, NutrientRuleSchema
+from models.feed import Feed, FeedSchema
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -56,6 +62,19 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
 
+
+
+db_uri = "postgresql://postgres:yjrhr1102@localhost:5432/newdb3" #開発用
+# db_uri = os.environ.get('DATABASE_URL') #本番用
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+ma.init_app(app)
+# q = Queue(connection=conn)
+
+
+
 @app.route("/favicon.ico")
 def favicon():
     return app.send_static_file("favicon.ico")
@@ -64,6 +83,55 @@ def favicon():
 @login_manager.user_loader
 def load_user(user_id):
   return users.get(int(user_id))
+
+
+
+
+# calcNutrients
+@app.route('/calcNutrients', methods=["GET"])
+def openWindowCalcNutrients():
+    return render_template("calcNutrients.haml")
+
+@app.route('/getNutrientRule/<sex>/<age>')
+def getNutrientRule(sex, age):
+    datalist = NutrientRule.query.filter(
+        NutrientRule.sex == sex,
+        NutrientRule.age_low_limit <= age,
+        NutrientRule.age_high_limit >= age,
+      ).order_by(
+          asc(NutrientRule.nutrient_code)
+      ).all()
+    datalist_schema = NutrientRuleSchema(many=True)
+    return jsonify({'data': datalist_schema.dumps(datalist, ensure_ascii=False, default=decimal_default_proc)})
+
+@app.route('/getFeetList')
+def getFeetList():
+    datalist = Feed.query.filter(
+      ).order_by(
+          asc(Feed.feed_code),
+          asc(Feed.nutrient_code)
+      ).all()
+    datalist_schema = FeedSchema(many=True)
+    return jsonify({'data': datalist_schema.dumps(datalist, ensure_ascii=False, default=decimal_default_proc)})
+
+
+
+def decimal_default_proc(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -101,30 +169,6 @@ def getMiningResult(id):
         
         c_word = ' '.join(docs)
     
-    #     filepath = ''
-    #     filename = ''
-    #     if c_word != '':
-    #       wordcloud = WordCloud(background_color='white',
-    #                           font_path='NotoSansJP-Regular.otf',
-    #                           width=800, height=400).generate(c_word)
-    #       ## 結果を画像に保存
-    #       timestamp = datetime.datetime.now()
-    #       timestampStr = timestamp.strftime('%Y%m%d%H%M%S%f')
-    #       filename = "wordcloud_" + timestampStr + "_" + kijiId + ".png"
-    #       filepath = "./static/image/" + filename
-    #       wordcloud.to_file(filepath)
-
-    #     dictId["aaData"].append( \
-    #       {"id":kijiId, \
-    #         "title":title_text.replace("\n",""), \
-    #         "kaiseki": c_word, \
-    #           "filepath": filename, \
-    #           "category": cate_text.replace("\n",""), \
-    #             "tokoDate": date_text, \
-    #               "honbun": body_text.replace("\n","")} 
-    #         )
-    #   # kijiId+=1
-
     dictId = {}
     dictId['aaData']=[]
     dictId["aaData"].append( \
@@ -154,7 +198,6 @@ def tryScrapeTop():
                     "title": article.find(class_="entry-title").find("a").contents[0]
                 } 
             )
-
 
     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
 

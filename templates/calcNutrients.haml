@@ -1,0 +1,60 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      属性を選択してください。
+  %div.row
+    %div.col-auto(style="font-weight:bold")
+      性別
+    %div.col-auto
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioSexMale(type="radio" name="radioSex" value="male")
+        %label.form-check-label(for="radioSexMale")
+          男
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioSexFemale(type="radio" name="radioSex" value="female")
+        %label.form-check-label(for="radioSexFemale")
+          女
+    %div.col-auto(style="font-weight:bold")
+      年齢ゾーン
+    %div.col-auto
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioAge1829(type="radio" name="radioAge" value="18,29")
+        %label.form-check-label(for="radioAge1829")
+          18歳 － 29歳
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioAge3049(type="radio" name="radioAge" value="30,49")
+        %label.form-check-label(for="radioAge3049")
+          30歳 － 49歳
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioAge5064(type="radio" name="radioAge" value="50,64")
+        %label.form-check-label(for="radioAge5064")
+          50歳 － 64歳
+
+  %hr
+  %div.row
+    %div.col-8
+      %div.row
+        %div.row#divTableWrapper(style="height:500px;overflow-y:scroll")
+          %table.table#simpleTable
+
+    %div.col-4
+      %div.row
+        %div.col-auto
+          今日の餌を選択してください。
+      %div.row
+        %div.col-auto
+          %ul.list-group#ulFeedList
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/calcNutrients.js"></script>
+
+{% endblock  %}
+
+
