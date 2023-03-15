@@ -11,7 +11,7 @@ for (let target of radioSexs) {
 	target.addEventListener(`change`, function () {
     //alert(target.value);
     sex = target.value;
-    hoge();
+    getNutrientRule();
   });
 }
 
@@ -19,11 +19,11 @@ let radioAges = document.querySelectorAll(`input[type='radio'][name='radioAge']`
 for (let target of radioAges) {
 	target.addEventListener(`change`, function () {
     age = target.value;
-    hoge();
+    getNutrientRule();
 	});
 }
 
-function hoge(){
+function getNutrientRule(){
   if(sex == "" || age == ""){
     return;
   }
@@ -123,7 +123,7 @@ function createFeedTable(){
         chk.value = list[i].feed_code;
         chk.name = "feed";
         chk.addEventListener('change', function() {
-          hoge2();
+          calcSummary();
         });
         //li.innerText = list[i].feed_name;
         li.appendChild(chk);
@@ -141,7 +141,7 @@ function createFeedTable(){
 }
 
 
-function hoge2(){
+function calcSummary(){
   //var chkFeedList = document.getElementsByName("feed");
   var argFeedCodes = "";
   var chkFeedList = document.getElementById("ulFeedList").querySelectorAll('input')
@@ -150,11 +150,7 @@ function hoge2(){
         argFeedCodes = argFeedCodes + elem.value + ",";
       }
   })
-  // for(let i in chkFeedList){
-  //   if(chkFeedList[i].checked){
-  //     argFeedCodes = argFeedCodes + chkFeedList[i].value + ",";
-  //   }
-  // }
+
   argFeedCodes = argFeedCodes + "0";
 
   fetch('/getSummaryAmount/'+ argFeedCodes, {

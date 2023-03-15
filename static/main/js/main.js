@@ -18,4 +18,8 @@ document.getElementById("linkCalcNutrients").addEventListener('click', function(
   window.open('/calcNutrients');
 });
 
+document.getElementById("linkShowHerokuPlatform").addEventListener('click', function(){
+  window.open('/showHerokuPlatform');
+});
+
 

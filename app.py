@@ -39,6 +39,8 @@ from models.nutrientRule import NutrientRule, NutrientRuleSchema
 from models.feed import Feed, FeedSchema
 from decimal import Decimal
 
+import platform
+
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
         extensions=[HamlishExtension]
@@ -72,8 +74,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 ma.init_app(app)
-# q = Queue(connection=conn)
-
 
 
 @app.route("/favicon.ico")
@@ -84,6 +84,38 @@ def favicon():
 @login_manager.user_loader
 def load_user(user_id):
   return users.get(int(user_id))
+
+
+
+
+# showHerokuPlatform
+@app.route('/showHerokuPlatform', methods=["GET"])
+def openWindowShowHerokuPlatform():
+    return render_template("showHerokuPlatform.haml")
+
+@app.route('/getPlatformInfo', methods=["GET"])
+def getPlatformInfo():
+
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { "property" : "architecture", "value": platform.architecture() } )
+    dictId["aaData"].append(  { "property" : "system", "value": platform.system() } )
+    dictId["aaData"].append(  { "property" : "machine", "value": platform.machine() } )
+    dictId["aaData"].append(  { "property" : "platform", "value": platform.platform() } )
+    dictId["aaData"].append(  { "property" : "processor", "value": platform.processor() } )
+    dictId["aaData"].append(  { "property" : "python_build", "value": platform.python_build() } )
+    dictId["aaData"].append(  { "property" : "python_compiler", "value": platform.python_compiler() } )
+    dictId["aaData"].append(  { "property" : "python_branch", "value": platform.python_branch() } )
+    dictId["aaData"].append(  { "property" : "python_implementation", "value": platform.python_implementation() } )
+    dictId["aaData"].append(  { "property" : "python_revision", "value": platform.python_revision() } )
+    dictId["aaData"].append(  { "property" : "python_version", "value": platform.python_version() } )
+    dictId["aaData"].append(  { "property" : "python_version_tuple", "value": platform.python_version_tuple() } )
+    dictId["aaData"].append(  { "property" : "release", "value": platform.release() } )
+    dictId["aaData"].append(  { "property" : "version", "value": platform.version() } )
+    dictId["aaData"].append(  { "property" : "uname", "value": platform.uname() } )
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
 
 
 
