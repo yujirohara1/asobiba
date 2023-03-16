@@ -45,9 +45,9 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-import torch
-from torchvision import models, transforms
-from PIL import Image
+# import torch
+# from torchvision import models, transforms
+# from PIL import Image
 
 
 class FlaskWithHamlish(Flask):
@@ -105,11 +105,11 @@ def openWindowGettingStartPyTorch():
 
 @app.route('/hoge', methods=["GET"])
 def hoge():
-    vgg16 = models.vgg16(pretrained=True)
+    # vgg16 = models.vgg16(pretrained=True)
 
     dictId = {}
     dictId['aaData']=[]
-    dictId["aaData"].append(  { "version" : vgg16._version, "training": str(vgg16.training) } )
+    # dictId["aaData"].append(  { "version" : vgg16._version, "training": str(vgg16.training) } )
     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
 
 
