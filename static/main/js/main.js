@@ -26,4 +26,12 @@ document.getElementById("linkGettingStartOpenCV").addEventListener('click', func
   window.open('/gettingStartOpenCV');
 });
 
+document.getElementById("linkNotificationPushJS").addEventListener('click', function(){
+  window.open('/notificationPushJS');
+});
+
+document.getElementById("linkSetTimeoutOrSetInterval").addEventListener('click', function(){
+  window.open('/setTimeoutOrSetInterval');
+});
+
 

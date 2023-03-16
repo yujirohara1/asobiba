@@ -92,6 +92,17 @@ def load_user(user_id):
 
 
 
+# setTimeoutOrSetInterval
+@app.route('/setTimeoutOrSetInterval', methods=["GET"])
+def openWindowSetTimeoutOrSetInterval():
+    return render_template("setTimeoutOrSetInterval.haml")
+
+# notificationPushJS
+@app.route('/notificationPushJS', methods=["GET"])
+def openWindowNotificationPushJS():
+    return render_template("notificationPushJS.haml")
+
+
 # gettingStartOpenCV
 @app.route('/gettingStartOpenCV', methods=["GET"])
 def openWindowGettingStartOpenCV():

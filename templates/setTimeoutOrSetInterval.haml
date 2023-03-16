@@ -1,0 +1,50 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      setTimeout と setInterval の違い
+      
+  %hr
+  %div.row
+    %div.col-auto
+      setTimeout
+    %div.col-auto
+      ・・・　一定時間後に処理を実行する約束をする。
+  %div.row
+    %div.col-auto
+      %button.btn.btn-secondary#btnSetTimeout(type="button")
+        ３秒後に画面全体を真っ赤っ赤にする処理を setTimeout に予約する
+  %div.row(style="padding-top:20px")
+    %div.col-auto
+      %button.btn.btn-secondary#btnSetTimeoutCancel(type="button")
+        色を戻す
+
+  %hr
+  %div.row
+    %div.col-auto
+      setInterval
+    %div.col-auto
+      ・・・　一定時間ごとに処理を繰り返す約束をする。
+
+  %div.row
+    %div.col-auto
+      %button.btn.btn-secondary#btnsetInterval(type="button")
+        1秒ごとに画面全体を真っ赤っ赤にする処理を setInterval に予約する
+  %div.row(style="padding-top:20px")
+    %div.col-auto
+      %button.btn.btn-secondary#btnsetIntervalCancel(type="button")
+        中止する
+
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/setTimeoutOrSetInterval.js"></script>
+
+{% endblock  %}
+
+
