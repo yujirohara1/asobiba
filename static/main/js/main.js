@@ -34,8 +34,8 @@ document.getElementById("linkSetTimeoutOrSetInterval").addEventListener('click',
   window.open('/setTimeoutOrSetInterval');
 });
 
-document.getElementById("linkGettingStartPyTorch").addEventListener('click', function(){
-  window.open('/gettingStartPyTorch');
+document.getElementById("linkGetLibraryCollection").addEventListener('click', function(){
+  window.open('/getLibraryCollection');
 });
 
 

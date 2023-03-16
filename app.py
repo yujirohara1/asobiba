@@ -48,7 +48,8 @@ from matplotlib import pyplot as plt
 # import torch
 # from torchvision import models, transforms
 # from PIL import Image
-
+import pkgutil
+import pkg_resources
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -97,19 +98,18 @@ def load_user(user_id):
 
 
 
-# gettingStartPyTorch
-@app.route('/gettingStartPyTorch', methods=["GET"])
-def openWindowGettingStartPyTorch():
-    return render_template("gettingStartPyTorch.haml")
+# getLibraryCollection
+@app.route('/getLibraryCollection', methods=["GET"])
+def openWindowGetLibraryCollection():
+    return render_template("getLibraryCollection.haml")
 
 
-@app.route('/hoge', methods=["GET"])
-def hoge():
-    # vgg16 = models.vgg16(pretrained=True)
-
+@app.route('/getLibraryList', methods=["GET"])
+def getLibraryList():
     dictId = {}
     dictId['aaData']=[]
-    # dictId["aaData"].append(  { "version" : vgg16._version, "training": str(vgg16.training) } )
+    for _lib in pkg_resources.working_set:
+        dictId["aaData"].append(  { "lib_name" : _lib.project_name, "lib_version": _lib.version } )
     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
 
 
