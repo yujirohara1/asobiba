@@ -45,6 +45,11 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
+import torch
+from torchvision import models, transforms
+from PIL import Image
+
+
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
         extensions=[HamlishExtension]
@@ -88,6 +93,25 @@ def favicon():
 @login_manager.user_loader
 def load_user(user_id):
   return users.get(int(user_id))
+
+
+
+
+# gettingStartPyTorch
+@app.route('/gettingStartPyTorch', methods=["GET"])
+def openWindowGettingStartPyTorch():
+    return render_template("gettingStartPyTorch.haml")
+
+
+@app.route('/hoge', methods=["GET"])
+def hoge():
+    vgg16 = models.vgg16(pretrained=True)
+
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { "version" : vgg16._version, "training": str(vgg16.training) } )
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
 
 
 

@@ -43,3 +43,5 @@ openai==0.27.2
 oauthlib==3.2.2
 opencv-python--headless==4.7.0.72
 matplotlib==3.4.3
+torch==2.0.0
+torchvision==0.15.1
