@@ -148,7 +148,7 @@ def openWindowAutoSaveByInterval():
             if data_listA is not None:
                 for row in data_listA:
                     values = values + row["item_id"] + ":" + row["item_value"] + ","
-        values = values + "item_id:item_value"
+        #values = values + "item_id:item_value"
 
     else:
         session.permanent = True
