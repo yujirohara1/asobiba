@@ -78,8 +78,8 @@ openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
 
 
 
-# db_uri = "postgresql://postgres:yjrhr1102@localhost:5432/newdb3" #開発用
-db_uri = os.environ.get('DATABASE_URL') #本番用
+db_uri = "postgresql://postgres:yjrhr1102@localhost:5432/newdb3" #開発用
+# db_uri = os.environ.get('DATABASE_URL') #本番用
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -159,14 +159,16 @@ def openWindowAutoSaveByInterval():
         login_user(users[id])
         session["session_id"] =  session.get("_id")
 
-    return render_template("autoSaveByInterval.haml", values=returnValue)
+    return render_template("autoSaveByInterval.haml", result=returnValue)
 
 @app.route('/autoSaveProcess/<params>', methods=["GET"])
 #@login_required
 def autoSaveProcess(params):
     vals = params.split(",")
     # AutoSaveInterval.query.filter(AutoSaveInterval.session_id==current_user.user_id).delete()
-    AutoSaveInterval.query.filter(AutoSaveInterval.session_id==session.get("_id")).delete()
+    AutoSaveInterval.query.filter(
+        AutoSaveInterval.session_id==session.get("_id")
+    ).delete()
 
     dictId = {}
     dictId['aaData']=[]

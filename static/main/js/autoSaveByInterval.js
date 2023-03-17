@@ -3,7 +3,8 @@ window.onload = function(){
   //getRecordBySessionId();
   try{
     var previousRecord = document.getElementById("hiddenRecord").value;
-    console.log(previousRecord);
+    //console.log(previousRecord);
+    alert(previousRecord);
 
     var vals = previousRecord.split(",");
     if(vals.length>=2){
@@ -113,9 +114,9 @@ function startAutoSave(){
           
           setTimeout(() => {
             document.getElementById("labelAutoSaveProcess").innerText = "";
-          }, 100);
+          }, 300);
 
-        }, 100);
+        }, 300);
 
       })
       .catch(error => { 

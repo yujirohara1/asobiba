@@ -23,7 +23,7 @@
         &nbsp;
   %hr
   %div.row
-    %div.col-4
+    %div.col-10
       %div.row
         %div.col-12
           %div.input-group.mb-3
@@ -47,16 +47,16 @@
 
   %hr
   %div.row
-    %div.col-1
+    %div.col-2
       自動保存データ
-    %div.col-5
+    %div.col-10
       %table.table#simpleTable
 
   %hr
   %div.row
-    %div.col-1
+    %div.col-2
       セッションID
-    %div.col-5
+    %div.col-10
       %div#divSessionId
 
 
@@ -64,7 +64,7 @@
   %div.row
     %div.col-1
     %div.col-5
-      %input#hiddenRecord(type="hidden" value={{ values }})
+      %input#hiddenRecord(type="hidden" value= {{ result }} ) 
         
 
 
