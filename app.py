@@ -125,8 +125,7 @@ users = {    }
 @app.route('/autoSaveByInterval', methods=["GET"])
 def openWindowAutoSaveByInterval():
     returnValue = ""
-    #if current_user.is_authenticated:
-    if session.get("session_id") != None :
+    if current_user.is_authenticated:
             # session_idからレコード取得
         sql = " "
         sql = sql + "    select              " 
@@ -135,7 +134,8 @@ def openWindowAutoSaveByInterval():
         sql = sql + "    from                " 
         sql = sql + "        auto_save_interval  " 
         sql = sql + "    where               " 
-        sql = sql + "        session_id = '" + current_user.user_id + "'   " 
+        # sql = sql + "        session_id = '" + current_user.user_id + "'   " 
+        sql = sql + "        session_id = '" + session.get("_id") + "'   " 
         sql = sql + "    order by            " 
         sql = sql + "        item_id         " 
         
@@ -151,34 +151,35 @@ def openWindowAutoSaveByInterval():
         returnValue = returnValue + "item_id:item_value"
 
     else:
-        # session.permanent = True
-        # app.permanent_session_lifetime = timedelta(minutes=30)
-        # id = random.randint(1, 9999999999999999)
-        # sessionId = session.get("_id")
-        # users[id] = User(id, sessionId, "dummy", "dummy")
-        # login_user(users[id])
-        session["session_id"] = session.get("_id")
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(minutes=30)
+        id = random.randint(1, 9999999999999999)
+        sessionId = session.get("_id")
+        users[id] = User(id, sessionId, "dummy", "dummy")
+        login_user(users[id])
+        session["session_id"] =  session.get("_id")
 
     return render_template("autoSaveByInterval.haml", values=returnValue)
 
 @app.route('/autoSaveProcess/<params>', methods=["GET"])
+#@login_required
 def autoSaveProcess(params):
     vals = params.split(",")
     # AutoSaveInterval.query.filter(AutoSaveInterval.session_id==current_user.user_id).delete()
-    AutoSaveInterval.query.filter(AutoSaveInterval.session_id == session["session_id"]).delete()
+    AutoSaveInterval.query.filter(AutoSaveInterval.session_id==session.get("_id")).delete()
 
     dictId = {}
     dictId['aaData']=[]
 
     for v in vals:
         autoSaveInterval = AutoSaveInterval()
-        autoSaveInterval.session_id = session["session_id"] #current_user.user_id
+        autoSaveInterval.session_id = session.get("_id")#current_user.user_id
         autoSaveInterval.item_id = v.split(":")[0]
         autoSaveInterval.item_value = v.split(":")[1]
         db.session.add(autoSaveInterval)
         
         dictId["aaData"].append(  { 
-            "session_id" : session["session_id"], #current_user.user_id, 
+            "session_id" : session.get("_id"), #current_user.user_id, 
             "item_id":  v.split(":")[0],
             "item_value":  v.split(":")[1]
         } )
