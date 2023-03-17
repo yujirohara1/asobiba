@@ -107,21 +107,9 @@ class User(UserMixin):
 users = {    }
 
 
+
+
 # autoSaveByInterval
-
-# @app.route('/getRecordBySessionId', methods=["GET"])
-# def getRecordBySessionId():
-
-#     current_user.
-#     dictId["aaData"].append(  { 
-#         "session_id" : current_user.user_id, 
-#         "item_id":  v.split(":")[0],
-#         "item_value":  v.split(":")[1]
-#     } )
-
-#     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
-
-
 @app.route('/autoSaveByInterval', methods=["GET"])
 def openWindowAutoSaveByInterval():
     returnValue = ""
@@ -190,7 +178,6 @@ def autoSaveProcess(params):
     db.session.commit()
     
     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
-
 
 
 
