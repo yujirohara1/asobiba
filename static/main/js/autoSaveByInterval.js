@@ -61,11 +61,11 @@ function startAutoSave(){
       lbl.innerText = "自動保存中...";
       lbl.classList.add("badge","bg-warning","text-dark");
 
-      var vals = getInputValue(document.getElementById("labelA").innerText) + ":" +
+      var vals = getInputValue(document.getElementById("labelA").id) + ":" +
                 getInputValue(document.getElementById("inputA").value) + "," +
-                getInputValue(document.getElementById("labelB").innerText) + ":" +
+                getInputValue(document.getElementById("labelB").id) + ":" +
                 getInputValue(document.getElementById("inputB").value) + "," +
-                getInputValue(document.getElementById("labelC").innerText) + ":" +
+                getInputValue(document.getElementById("labelC").id) + ":" +
                 getInputValue(document.getElementById("inputC").value) ;
 
       fetch('/autoSaveProcess/' + vals, {
