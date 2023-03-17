@@ -1,0 +1,78 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      ○○秒おきに自動保存するフォームを実装する
+    %div.col-auto
+      %select.form-select.form-select-sm#selectIntervalSecond
+        %option(value=3)
+          3秒おき
+        %option(value=5)
+          5秒おき
+        %option(value=10)
+          10秒おき
+    %div.col-auto
+      %button.btn.btn-sm.btn-success#btnSetInterval
+        セット
+    %div.col-auto
+      %span#labelAutoSaveProcess
+        &nbsp;
+  %hr
+  %div.row
+    %div.col-4
+      %div.row
+        %div.col-12
+          %div.input-group.mb-3
+            %span.input-group-text#labelA
+              項目１
+            %input.form-control#inputA(type="text")
+
+      %div.row
+        %div.col-12
+          %div.input-group.mb-3
+            %span.input-group-text#labelB
+              項目２
+            %input.form-control#inputB(type="text")
+
+      %div.row
+        %div.col-12
+          %div.input-group.mb-3
+            %span.input-group-text#labelC
+              項目３
+            %input.form-control#inputC(type="text")
+
+  %hr
+  %div.row
+    %div.col-1
+      自動保存データ
+    %div.col-5
+      %table.table#simpleTable
+
+  %hr
+  %div.row
+    %div.col-1
+      セッションID
+    %div.col-5
+      %div#divSessionId
+
+
+  %hr
+  %div.row
+    %div.col-1
+    %div.col-5
+      %input#hiddenRecord(type="hidden" value={{ values }})
+        
+
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/autoSaveByInterval.js"></script>
+
+{% endblock  %}
+
+

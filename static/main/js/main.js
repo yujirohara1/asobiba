@@ -38,4 +38,8 @@ document.getElementById("linkGetLibraryCollection").addEventListener('click', fu
   window.open('/getLibraryCollection');
 });
 
+document.getElementById("linkAutoSaveByInterval").addEventListener('click', function(){
+  window.open('/autoSaveByInterval');
+});
+
 

@@ -37,6 +37,7 @@ from sqlalchemy import distinct
 from sqlalchemy import asc
 from models.nutrientRule import NutrientRule, NutrientRuleSchema
 from models.feed import Feed, FeedSchema
+from models.autoSaveInterval import AutoSaveInterval, AutoSaveIntervalSchema
 from decimal import Decimal
 
 import platform
@@ -94,6 +95,99 @@ def favicon():
 @login_manager.user_loader
 def load_user(user_id):
   return users.get(int(user_id))
+
+
+class User(UserMixin):
+    def __init__(self, id, user_id, user_nm, password):
+        self.id = id
+        self.user_id = user_id
+        self.user_nm = user_nm
+        self.password = password
+
+users = {    }
+
+
+# autoSaveByInterval
+
+# @app.route('/getRecordBySessionId', methods=["GET"])
+# def getRecordBySessionId():
+
+#     current_user.
+#     dictId["aaData"].append(  { 
+#         "session_id" : current_user.user_id, 
+#         "item_id":  v.split(":")[0],
+#         "item_value":  v.split(":")[1]
+#     } )
+
+#     return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
+@app.route('/autoSaveByInterval', methods=["GET"])
+def openWindowAutoSaveByInterval():
+    values = ""
+    if current_user.is_authenticated:
+            # session_idからレコード取得
+        sql = " "
+        sql = sql + "    select              " 
+        sql = sql + "        item_id         " 
+        sql = sql + "        , item_value    " 
+        sql = sql + "    from                " 
+        sql = sql + "        auto_save_interval            " 
+        sql = sql + "    where               " 
+        sql = sql + "        session_id = '" + current_user.user_id + "'   " 
+        sql = sql + "    order by            " 
+        sql = sql + "        item_id         " 
+        
+        resultset=[]
+        data_listA = None
+        exist = False
+        
+        if db.session.execute(text(sql)).fetchone() is not None:
+            data_listA = db.session.execute(text(sql))
+
+            if data_listA is not None:
+                for row in data_listA:
+                    values = values + row["item_id"] + ":" + row["item_value"] + ","
+        values = values + "item_id:item_value"
+
+    else:
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(minutes=30)
+        id = random.randint(1, 9999999999999999)
+        sessionId = session.get("_id")
+        users[id] = User(id, sessionId, "dummy", "dummy")
+        login_user(users[id])
+
+    return render_template("autoSaveByInterval.haml", values=values)
+
+@app.route('/autoSaveProcess/<params>', methods=["GET"])
+@login_required
+def autoSaveProcess(params):
+    vals = params.split(",")
+    AutoSaveInterval.query.filter(AutoSaveInterval.session_id==current_user.user_id).delete()
+
+    dictId = {}
+    dictId['aaData']=[]
+
+    for v in vals:
+        autoSaveInterval = AutoSaveInterval()
+        autoSaveInterval.session_id = current_user.user_id
+        autoSaveInterval.item_id = v.split(":")[0]
+        autoSaveInterval.item_value = v.split(":")[1]
+        db.session.add(autoSaveInterval)
+        
+        dictId["aaData"].append(  { 
+            "session_id" : current_user.user_id, 
+            "item_id":  v.split(":")[0],
+            "item_value":  v.split(":")[1]
+        } )
+
+    # データを確定
+    db.session.commit()
+    
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
 
 
 
