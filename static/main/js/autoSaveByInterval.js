@@ -6,17 +6,17 @@ window.onload = function(){
     console.log(previousRecord);
 
     var vals = previousRecord.split(",");
-    if(vals.length>=1){
+    if(vals.length>=2){
       if(vals[0].split(":").length == 2){
         document.getElementById("inputA").value = vals[0].split(":")[1];
       }
     }
-    if(vals.length>=2){
+    if(vals.length>=3){
       if(vals[1].split(":").length == 2){
         document.getElementById("inputB").value = vals[1].split(":")[1];
       }
     }
-    if(vals.length>=3){
+    if(vals.length>=4){
       if(vals[2].split(":").length == 2){
         document.getElementById("inputC").value = vals[2].split(":")[1];
       }
