@@ -124,7 +124,7 @@ users = {    }
 
 @app.route('/autoSaveByInterval', methods=["GET"])
 def openWindowAutoSaveByInterval():
-    values = ""
+    returnValue = ""
     if current_user.is_authenticated:
             # session_idからレコード取得
         sql = " "
@@ -132,7 +132,7 @@ def openWindowAutoSaveByInterval():
         sql = sql + "        item_id         " 
         sql = sql + "        , item_value    " 
         sql = sql + "    from                " 
-        sql = sql + "        auto_save_interval            " 
+        sql = sql + "        auto_save_interval  " 
         sql = sql + "    where               " 
         sql = sql + "        session_id = '" + current_user.user_id + "'   " 
         sql = sql + "    order by            " 
@@ -140,15 +140,14 @@ def openWindowAutoSaveByInterval():
         
         resultset=[]
         data_listA = None
-        exist = False
         
         if db.session.execute(text(sql)).fetchone() is not None:
             data_listA = db.session.execute(text(sql))
 
             if data_listA is not None:
                 for row in data_listA:
-                    values = values + row["item_id"] + ":" + row["item_value"] + ","
-        values = values + "item_id:item_value"
+                    returnValue = returnValue + row["item_id"] + ":" + row["item_value"] + ","
+        returnValue = returnValue + "item_id:item_value"
 
     else:
         session.permanent = True
@@ -158,7 +157,7 @@ def openWindowAutoSaveByInterval():
         users[id] = User(id, sessionId, "dummy", "dummy")
         login_user(users[id])
 
-    return render_template("autoSaveByInterval.haml", values=values)
+    return render_template("autoSaveByInterval.haml", values=returnValue)
 
 @app.route('/autoSaveProcess/<params>', methods=["GET"])
 @login_required

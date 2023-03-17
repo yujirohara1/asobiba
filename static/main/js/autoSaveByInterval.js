@@ -113,9 +113,9 @@ function startAutoSave(){
           
           setTimeout(() => {
             document.getElementById("labelAutoSaveProcess").innerText = "";
-          }, 1000);
+          }, 100);
 
-        }, 1000);
+        }, 100);
 
       })
       .catch(error => { 
