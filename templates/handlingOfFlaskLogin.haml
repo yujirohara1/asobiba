@@ -1,0 +1,52 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      flask-loginの取り回し
+  %hr
+  %div.row
+    %div.col-auto
+      %div.row(style="padding-bottom:40px")
+        %div.col-auto
+          %button.btn.btn-info.btn-sm#btnHandleLogin
+            ログイン
+      %div.row(style="padding-bottom:40px")
+        %div.col-auto
+          %button.btn.btn-info.btn-sm#btnHandleConfirm
+            状態確認
+      %div.row(style="padding-bottom:40px")
+        %div.col-auto
+          %button.btn.btn-info.btn-sm#btnHandleLogout
+            ログアウト
+    %div.col-auto(style="border-left:1px solid lightgray")
+      %div.row(style="padding-bottom:10px")
+        %div
+          －current_userの状態－ ※時刻はU.S.Oregon
+      %div.row
+        %div#divStatus.fs-5
+          aaaaa
+  %hr
+  %div.row
+    %div.col-auto
+      %div.row(style="padding-bottom:40px")
+        %div.col-auto
+          %button.btn.btn-warning.btn-sm#btnAtLoginRequired
+            @login_requiredの呼び出し
+        %div.col-auto
+          %div#resultLoginRequired
+      %div.row(style="padding-bottom:40px")
+        %div.col-auto
+          @login_requiredなメソッドは、is_authenticated が True でなければプロテクトされる。
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/handlingOfFlaskLogin.js"></script>
+
+{% endblock  %}
+
+

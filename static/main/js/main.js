@@ -42,4 +42,8 @@ document.getElementById("linkAutoSaveByInterval").addEventListener('click', func
   window.open('/autoSaveByInterval');
 });
 
+document.getElementById("linkHandlingOfFlaskLogin").addEventListener('click', function(){
+  window.open('/handlingOfFlaskLogin');
+});
+
 

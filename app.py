@@ -107,6 +107,71 @@ class User(UserMixin):
 users = {    }
 
 
+# handlingOfFlaskLogin
+@app.route('/handlingOfFlaskLogin', methods=["GET"])
+def openWindowHandlingOfFlaskLogin():
+    return render_template("handlingOfFlaskLogin.haml")
+
+@app.route('/callAtLoginRequired', methods=["GET"])
+@login_required
+def callAtLoginRequired():
+    return "1"
+
+
+
+@app.route('/confirmStatus', methods=["GET"])
+def confirmStatus():
+    # return render_template("confirmStatus.haml")
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { 
+        "is_authenticated" : str(current_user.is_authenticated), 
+        "is_active": str(current_user.is_active) ,
+        "is_anonymous": str(current_user.is_anonymous),
+        "timestamp" : datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
+    } )
+
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
+@app.route('/handleLogin', methods=["GET"])
+def handleLogin():
+    
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=30)
+    id = random.randint(1, 9999999999999999)
+    sessionId = session.get("_id")
+    users[id] = User(id, sessionId, "dummy", "dummy")
+    login_user(users[id])
+    session["session_id"] =  session.get("_id")
+    
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { 
+        "is_authenticated" : str(current_user.is_authenticated), 
+        "is_active": str(current_user.is_active) ,
+        "is_anonymous": str(current_user.is_anonymous),
+        "timestamp" : datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
+    } )
+
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
+
+@app.route('/handleLogout', methods=["GET"])
+def handleLogout():
+    logout_user()
+
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { 
+        "is_authenticated" : str(current_user.is_authenticated), 
+        "is_active": str(current_user.is_active) ,
+        "is_anonymous": str(current_user.is_anonymous),
+        "timestamp" : datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S %f')
+    } )
+
+    return json.dumps(dictId, skipkeys=True, ensure_ascii=False)
+
 
 
 # autoSaveByInterval
