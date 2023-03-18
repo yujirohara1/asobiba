@@ -106,7 +106,7 @@ class User(UserMixin):
         self.user_nm = user_nm
         self.password = password
 
-users = {    }
+users = {}
 
 
 
@@ -131,9 +131,17 @@ def modifiedExcelDownload():
     files.save('tmp/' + filename)
 
     wb = openpyxl.load_workbook('tmp/' + filename)
-    shidx = 1
+
+
+    # shidx = 0
+    # for sh in wb:
+    #     wb[sh.title].title = str(random.randint(1, 9999999999999999)) + str(shidx)  #request.form["sheetName" + str(idx)] #"test" + str(shidx)
+    #     shidx = shidx + 1
+
+
+    shidx = 0
     for sh in wb:
-        sh.title = "test" + str(shidx)
+        wb[sh.title].title = request.form["sheetName" + str(shidx)] #"test" + str(shidx)
         shidx = shidx + 1
 
     wb.save('tmp/' + filename + '2.xlsx')

@@ -64,6 +64,10 @@ function hoge(){
       inp.type = "text";
       inp.value = list[i].sheetName;
       inp.classList.add("form-control");
+      inp.id = "inputSheetName" + i;
+      inp.addEventListener('input', function(){
+        checkSheetNameList();
+      });
       tdC.appendChild(inp);
       tr.appendChild(tdA);
       tr.appendChild(tdB);
@@ -76,6 +80,46 @@ function hoge(){
   .catch(error => { console.log(error); });
 }
 
+// 　　　コロン(:)
+// 　　　円記号(\)
+// 　　　疑問符(?)
+// 　　　角括弧([])
+// 　　　スラッシュ(/)
+// 　　　アスタリスク(*)
+
+function checkSheetNameList(){
+  var table = document.getElementById("simpleTable");
+  var errFlg = false;
+  for(let i=0; i<table.rows.length; i++){
+    var inp = document.getElementById("inputSheetName" + i);
+    if(inp.value.indexOf(":") > 0 || 
+      inp.value.indexOf("\\") > 0 || 
+      inp.value.indexOf("?") > 0 || 
+      inp.value.indexOf("[") > 0 || 
+      inp.value.indexOf("]") > 0 || 
+      inp.value.indexOf("/") > 0 || 
+      inp.value.indexOf("*") > 0 ){
+      inp.style.color = "red";
+      document.getElementById("btnExcecuteChange").classList.add("disabled");
+      document.getElementById("divAlertMessage").innerText = "禁止文字が含まれています。（" + inp.value + "）";
+      errFlg = true;
+    } else if(inp.value.length > 31) {
+      inp.style.color = "red";
+      document.getElementById("btnExcecuteChange").classList.add("disabled");
+      document.getElementById("divAlertMessage").innerText = "31文字を越えています。（" + inp.value + "）";
+      errFlg = true;
+    } else if(inp.value=="") {
+      document.getElementById("btnExcecuteChange").classList.add("disabled");
+      document.getElementById("divAlertMessage").innerText = "シート名が入力されていません。";
+    } else {
+      inp.style.color = "";
+    }
+  }
+  if(!errFlg){
+    document.getElementById("btnExcecuteChange").classList.remove("disabled");
+    document.getElementById("divAlertMessage").innerText = "";
+  }
+}
 
 document.getElementById("btnExcecuteChange").addEventListener('click', function(){
   //alert(123);
@@ -83,6 +127,11 @@ document.getElementById("btnExcecuteChange").addEventListener('click', function(
   var files = document.querySelector('#inputFile').files
   let formData = new FormData();
   formData.append('excelFile', files[0]);
+
+  var table = document.getElementById("simpleTable");
+  for(let i=0; i<table.rows.length; i++){
+    formData.append('sheetName' + i, document.getElementById("inputSheetName" + i).value);
+  }
 
   fetch('/modifiedExcelDownload', {
     method: 'PUT',
