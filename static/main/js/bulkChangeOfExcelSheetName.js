@@ -80,13 +80,6 @@ function hoge(){
   .catch(error => { console.log(error); });
 }
 
-// 　　　コロン(:)
-// 　　　円記号(\)
-// 　　　疑問符(?)
-// 　　　角括弧([])
-// 　　　スラッシュ(/)
-// 　　　アスタリスク(*)
-
 function checkSheetNameList(){
   var table = document.getElementById("simpleTable");
   var errFlg = false;
@@ -122,7 +115,6 @@ function checkSheetNameList(){
 }
 
 document.getElementById("btnExcecuteChange").addEventListener('click', function(){
-  //alert(123);
   
   var files = document.querySelector('#inputFile').files
   let formData = new FormData();
@@ -132,6 +124,9 @@ document.getElementById("btnExcecuteChange").addEventListener('click', function(
   for(let i=0; i<table.rows.length; i++){
     formData.append('sheetName' + i, document.getElementById("inputSheetName" + i).value);
   }
+
+  var spinner = document.getElementById("spinnerDownloadA");
+  spinner.classList.remove("invisible");
 
   fetch('/modifiedExcelDownload', {
     method: 'PUT',
@@ -143,6 +138,7 @@ document.getElementById("btnExcecuteChange").addEventListener('click', function(
   })
   .then((res)=> res.blob())
   .then(blob => {
+    spinner.classList.add("invisible");
     let anchor = document.createElement("a");
     anchor.href = window.URL.createObjectURL(blob);
     anchor.download = "aaaa.xlsx";
@@ -152,57 +148,4 @@ document.getElementById("btnExcecuteChange").addEventListener('click', function(
     console.log(error)
   });
   
-  // $.ajax({
-  //   type: "GET",
-  //   url: "/OutputExcelNouhinsho/" + customerid + "/" + deliverYmd.split("/").join("-") + "",
-  //   xhrFields    : {responseType : 'blob'},
-  // }).done(function(data, textStatus, jqXHR ) {
-  //   var blob=new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64"});//
-  //   var link = document.createElement('a');
-  //   link.href = window.URL.createObjectURL(blob);
-  //   link.download = "" + Math.random().toString(32).substring(2) + ".xlsx";
-  //   link.click();
-  // }).fail(function(data) {
-  //       alert("エラー：" + data.statusText);
-  // }).always(function(data) {
-  // });
-
 });
-
-
-// function hoge(){
-  
-//   fetch('/getPlatformInfo', {
-//     method: 'GET',
-//     'Content-Type': 'application/json'
-//   })
-//   .then(res => res.json())
-//   .then(jsonData => {
-//     var list = jsonData.aaData;
-//     var table = document.getElementById("simpleTable");
-//     var thead = document.createElement("thead");
-//     var tbody = document.createElement("tbody");
-//     var thA = document.createElement("th");
-//     var thB = document.createElement("th");
-//     thA.innerText = "プロパティ";
-//     thB.innerText = "値";
-//     thead.appendChild(thA);
-//     thead.appendChild(thB);
-//     table.appendChild(thead);
-//     for(let i in list){
-//       var tr = document.createElement("tr");
-//       var tdA = document.createElement("td");
-//       var tdB = document.createElement("td");
-//       tdA.innerText = list[i].property;
-//       tdB.innerText = list[i].value;
-//       tr.appendChild(tdA);
-//       tr.appendChild(tdB);
-//       tbody.appendChild(tr);
-//     }
-//     table.appendChild(tbody);
-//   })
-//   .catch(error => { 
-//     console.log(error)
-//   });
-
-// }
