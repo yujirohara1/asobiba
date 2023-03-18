@@ -51,6 +51,8 @@ from matplotlib import pyplot as plt
 # from PIL import Image
 import pkgutil
 import pkg_resources
+import pandas as pd
+import openpyxl
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -105,6 +107,73 @@ class User(UserMixin):
         self.password = password
 
 users = {    }
+
+
+
+
+
+
+
+
+# bulkChangeOfExcelSheetName
+@app.route('/bulkChangeOfExcelSheetName', methods=["GET"])
+def openWindowBulkChangeOfExcelSheetName():
+    return render_template("bulkChangeOfExcelSheetName.haml")
+
+@app.route('/modifiedExcelDownload', methods=["PUT"])
+def modifiedExcelDownload():
+    
+    files = request.files['excelFile']
+    filenameOrg = files.filename
+    idx = len(files.filename.split("."))-1
+    extention = files.filename.split(".")[idx]
+    filename = getRandomKey() + "." + extention
+    files.save('tmp/' + filename)
+
+    wb = openpyxl.load_workbook('tmp/' + filename)
+    shidx = 1
+    for sh in wb:
+        sh.title = "test" + str(shidx)
+        shidx = shidx + 1
+
+    wb.save('tmp/' + filename + '2.xlsx')
+
+    XLSX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+    return send_file('tmp/' + filename + '2.xlsx', as_attachment=True, mimetype=XLSX_MIMETYPE, attachment_filename = filenameOrg + '_modified.xlsx')
+
+@app.route('/uploadFiles',methods=["PUT"])
+def uploadFiles():
+    files = request.files['excelFile']
+    filenameOrg = files.filename
+    idx = len(files.filename.split("."))-1
+    extention = files.filename.split(".")[idx]
+    filename = getRandomKey() + "." + extention
+    files.save('tmp/' + filename)
+
+    retList = []
+    shidx = 0
+
+    try:
+        xlFile = pd.read_excel(files, sheet_name=None)
+        for sh in xlFile:
+            shidx = shidx + 1
+            retList.append(
+            {
+                "rowSize":str(xlFile[sh].values.shape[0]),
+                "colSize":str(xlFile[sh].values.shape[1]),
+                "sheetIdx":shidx,
+                "sheetName":sh,
+                "fileName":filename,
+                "fileNameOrg":filenameOrg
+            }
+            )
+
+    except:
+        pass
+
+    return jsonify({'data': json.dumps(retList)})
+
 
 
 # handlingOfFlaskLogin

@@ -1,0 +1,42 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      Excelシート名を一括変更する
+
+  %hr
+  %div.row
+    %div.col-auto
+      %label.form-label(for="inputFile")
+        Excelファイルを指定してください。
+  %div.row
+    %div.col-auto
+      %input.form-control#inputFile(type="file")
+    %div.col-auto
+      %div.spinner-border.invisible#spinnerCheckFiles(role="status")
+        %span.visually-hidden
+    %div.col-auto#lblStatus
+      
+
+  %hr
+  %div.row
+    %div.col-auto
+      %table.table#simpleTable
+  %hr
+  %div.row
+    %div.col-auto
+      %button.btn.btn-primary#btnExcecuteChange
+        確定
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/bulkChangeOfExcelSheetName.js"></script>
+
+{% endblock  %}
+
+

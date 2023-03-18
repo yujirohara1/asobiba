@@ -47,3 +47,9 @@ document.getElementById("linkHandlingOfFlaskLogin").addEventListener('click', fu
 });
 
 
+
+document.getElementById("linkBulkChangeOfExcelSheetName").addEventListener('click', function(){
+  window.open('/bulkChangeOfExcelSheetName');
+});
+
+
