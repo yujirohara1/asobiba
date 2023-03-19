@@ -127,7 +127,8 @@ def modifiedExcelDownload():
     filenameOrg = files.filename
     idx = len(files.filename.split("."))-1
     extention = files.filename.split(".")[idx]
-    filename = getRandomKey() + "." + extention
+    filenameKey = getRandomKey()
+    filename = filenameKey + "." + extention
     files.save('tmp/' + filename)
 
     wb = openpyxl.load_workbook('tmp/' + filename)
@@ -144,11 +145,13 @@ def modifiedExcelDownload():
         wb[sh.title].title = request.form["sheetName" + str(shidx)] #"test" + str(shidx)
         shidx = shidx + 1
 
-    wb.save('tmp/' + filename + '2.xlsx')
+    filename = filenameKey + "2." + extention
+    wb.save('tmp/' + filename)
+
 
     XLSX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
-    return send_file('tmp/' + filename + '2.xlsx', as_attachment=True, mimetype=XLSX_MIMETYPE, attachment_filename = filenameOrg + '_modified.xlsx')
+    return send_file('tmp/' + filename, as_attachment=True, mimetype=XLSX_MIMETYPE, attachment_filename = filenameOrg + '_modified.xlsx')
 
 @app.route('/uploadFiles',methods=["PUT"])
 def uploadFiles():

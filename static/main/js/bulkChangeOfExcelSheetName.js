@@ -1,4 +1,5 @@
 window.onload = function(){
+  document.getElementById("btnExcecuteChange").classList.add("disabled");
   return;
 }
 
@@ -141,7 +142,8 @@ document.getElementById("btnExcecuteChange").addEventListener('click', function(
     spinner.classList.add("invisible");
     let anchor = document.createElement("a");
     anchor.href = window.URL.createObjectURL(blob);
-    anchor.download = "aaaa.xlsx";
+    var tmp = files[0].name.split(".");
+    anchor.download = tmp[0] + "_modified." + tmp[1];
     anchor.click();
   })
   .catch(error => { 
