@@ -114,6 +114,10 @@ users = {}
 
 
 
+# blendModeOfCss
+@app.route('/blendModeOfCss', methods=["GET"])
+def openWindowBlendModeOfCss():
+    return render_template("blendModeOfCss.haml")
 
 # bulkChangeOfExcelSheetName
 @app.route('/bulkChangeOfExcelSheetName', methods=["GET"])

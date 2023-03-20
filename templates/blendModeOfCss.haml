@@ -1,0 +1,61 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      cssのブレンドモードプロパティを試す
+  %hr
+  %div.row
+    %div.col-auto
+      %select.form-select#selectBlendMode(aria-label="Default select example")
+        %option(value="normal" selected)
+          normal
+        %option(value="multiply")
+          multiply
+        %option(value="screen")
+          screen
+        %option(value="overlay")
+          overlay
+        %option(value="darken")
+          darken
+        %option(value="lighten")
+          lighten
+        %option(value="color-dodge")
+          color-dodge
+        %option(value="color-burn")
+          color-burn
+        %option(value="hard-light")
+          hard-light
+        %option(value="soft-light")
+          soft-light
+        %option(value="difference")
+          difference
+        %option(value="exclusion")
+          exclusion
+        %option(value="hue")
+          hue
+        %option(value="saturation")
+          saturation
+        %option(value="color")
+          color
+        %option(value="luminosity")
+          luminosity
+
+  %div.row
+    %div.col-auto
+      %div.isolate
+        %div.circle.circle-1#imgRed
+        %div.circle.circle-2#imgGreen
+        %div.circle.circle-3#imgBlue
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/blendModeOfCss.js"></script>
+
+{% endblock  %}
+

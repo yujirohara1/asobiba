@@ -575,3 +575,35 @@ table.dataTable thead tr {
     border-radius: 10px;
     box-shadow: none;
   }
+
+  
+  .circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    mix-blend-mode: normal;
+    position: absolute;
+  }
+
+  .circle-1 {
+    background: rgb(255,0,0);
+    left: 100px;
+    top:50px;
+  }
+
+  .circle-2 {
+    background: rgb(0,255,0);
+    left: 165px;
+    top: 150px;
+  }
+
+  .circle-3 {
+    background: rgb(0,0,255);
+    left: 35px;
+    top: 150px;
+  }
+
+  .isolate {
+    isolation: isolate; /* isolation がないと、背景色が考慮されてしまう */
+    position: relative;
+  }

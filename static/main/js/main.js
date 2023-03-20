@@ -46,10 +46,12 @@ document.getElementById("linkHandlingOfFlaskLogin").addEventListener('click', fu
   window.open('/handlingOfFlaskLogin');
 });
 
-
-
 document.getElementById("linkBulkChangeOfExcelSheetName").addEventListener('click', function(){
   window.open('/bulkChangeOfExcelSheetName');
+});
+
+document.getElementById("linkBlendModeOfCss").addEventListener('click', function(){
+  window.open('/blendModeOfCss');
 });
 
 
