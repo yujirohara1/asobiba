@@ -114,6 +114,19 @@ users = {}
 
 
 
+# directionsApiOfGoogleMap
+@app.route('/directionsApiOfGoogleMap', methods=["GET"])
+def openWindowDirectionsApiOfGoogleMap():
+    return render_template("directionsApiOfGoogleMap.haml")
+
+@app.route('/getDirectionP2Pinfo/<pointA>/<pointB>', methods=["GET"])
+def getDirectionP2Pinfo(pointA, pointB):
+    res = requests.get("https://maps.googleapis.com/maps/api/directions/json?origin=" + pointA + "&destination=" + pointB + "&mode=walking&key=AIzaSyAfiGfH6P_MWaNcaTtK07mQTLSpkPsQmGQ")
+    return json.dumps(res.text, skipkeys=True, ensure_ascii=False)
+
+
+
+
 # blendModeOfCss
 @app.route('/blendModeOfCss', methods=["GET"])
 def openWindowBlendModeOfCss():

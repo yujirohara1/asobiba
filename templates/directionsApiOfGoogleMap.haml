@@ -1,0 +1,44 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      赤坂にある19の坂を最も効率よく回る方法を求める
+  %hr
+  %div.row
+    %div.col-auto
+      %button.btn.btn-success#btnGetP2Pinfo
+        ２地点間情報を取得する
+    %div.col-auto
+      ※開発過程でDirectionAPIを数千回リクエストしてしまったためtableは固定とした。
+  %div.row
+    %div.col-auto
+      %table.table.table-bordered#simpleTable(style="margin-top:10px")
+  %hr
+  %div.row
+    %div.col-auto
+      %select.form-select#startPointSelect
+    %div.col-auto
+      %button.btn.btn-success#btnCalcStart
+        近似最近傍法で巡回経路を求める
+  %div.row
+    %div.col-auto
+      %div#divAnswer1
+  %div.row
+    %div.col-auto
+      %div#divAnswer2
+
+
+          
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/directionsApiOfGoogleMap.js"></script>
+
+{% endblock  %}
+
+

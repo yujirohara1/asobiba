@@ -55,3 +55,10 @@ document.getElementById("linkBlendModeOfCss").addEventListener('click', function
 });
 
 
+
+document.getElementById("linkDirectionsApiOfGoogleMap").addEventListener('click', function(){
+  window.open('/directionsApiOfGoogleMap');
+});
+
+
+
