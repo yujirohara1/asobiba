@@ -1,0 +1,22 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      nlplotで共起ネットワークがうまくいかず仕方なくWordCloud止まり
+  %hr
+  %div.row
+    %div.col-auto#divArea
+      %img#imgWordCloud
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/coOccurrenceNetwork.js"></script>
+
+{% endblock  %}
+
+

@@ -60,5 +60,9 @@ document.getElementById("linkDirectionsApiOfGoogleMap").addEventListener('click'
   window.open('/directionsApiOfGoogleMap');
 });
 
+document.getElementById("linkCoOccurrenceNetwork").addEventListener('click', function(){
+  window.open('/coOccurrenceNetwork');
+});
+
 
 

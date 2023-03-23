@@ -38,6 +38,7 @@ from sqlalchemy import asc
 from models.nutrientRule import NutrientRule, NutrientRuleSchema
 from models.feed import Feed, FeedSchema
 from models.autoSaveInterval import AutoSaveInterval, AutoSaveIntervalSchema
+from models.weblogArticle import WeblogArticle, WeblogArticleSchema
 from decimal import Decimal
 
 import platform
@@ -53,6 +54,12 @@ import pkgutil
 import pkg_resources
 import pandas as pd
 import openpyxl
+
+# import MeCab
+# import matplotlib.pyplot as plt
+# import re
+# import nlplot
+# from plotly.offline import iplot
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -114,6 +121,68 @@ users = {}
 
 
 
+# coOccurrenceNetwork
+@app.route('/coOccurrenceNetwork', methods=["GET"])
+def openWindowCoOccurrenceNetwork():
+    return render_template("coOccurrenceNetwork.haml")
+
+@app.route('/getCoOccurrenceNetworkImage', methods=["GET"])
+def getCoOccurrenceNetworkImage():
+    dictId = {}
+    dictId['aaData']=[]
+    dictId["aaData"].append(  { 
+        "is_authenticated" : "str(current_user.is_authenticated)", 
+    } )
+    
+    docs=[]
+    words=[]
+    
+    datalist = WeblogArticle.query.all()
+    # fullText = ""
+    for d in datalist:
+        #words = words + " " + d.text_body
+        tmp = d.text_body.split(" ")
+        for w in tmp:
+            if isExclusion(w)==False:
+                words.append(w)
+
+    c_word = ' '.join(words)
+
+    wordcloud = WordCloud(background_color='white',
+                        font_path='NotoSansJP-Regular.otf',
+                        width=1200, height=800).generate(c_word)
+    ## 結果を画像に保存
+    timestamp = datetime.datetime.now()
+    timestampStr = timestamp.strftime('%Y%m%d%H%M%S%f')
+    filename = getRandomKey() + ".png"
+    #filename = "wordcloud_" + timestampStr + "_" + kijiId + ".png"
+    filepath = "./static/image/" + filename
+    wordcloud.to_file(filepath)
+    imgPath = 'static/image/' + filename
+    return send_file(imgPath, as_attachment=True, mimetype='image/png', attachment_filename = filename)
+
+def isExclusion(word):
+    exclusionList = ["という", "こういう", "それでも","において","すぎ",
+        "ちゃんと", "こうした", "どうして", "いろいろ", "しかし", "", "", "",
+        "もらう", "っぽい", "かかる", "とりあえず", "ばかり", "わかり", "", "",
+        "にとって", "くれ", "わかり", "感じ", "あたり", "やすい", "もらっ", "",
+        "ちょっと", "ところが", "たくさん", "本当は", "やすい", "", "", "",
+        "そして", "まずは", "どうやら", "とおり", "つまり", 
+        "ちなみに", "たぶん", "それら", "なくなっ", "それ", 
+        "かけ", "そもそも", "つけ", "そうした", "こっち", 
+        "いろんな", "どっち", "とにかく", "くれる", "", 
+        "できる", "みたい", "そういう", "むしろ", "こんな","による","あまり",
+        "として", "ところ", "といった", "どんな","について","たとえば",
+        "くらい", "らしい", "ほしい", "でき", "わから","ほとんど",
+        "しまう", "いつも", "しれ", "られ", "いけ", "しまっ", "あるいは",
+        "もちろん", "みんな", "られる", "ながら", "に対して", "すぎる",
+        "やっぱり", "わかる", "そんな", "わかっ", "だって", "だから",
+        "なんか", "なんて", "すべて", "もっと", "だけど", "ものの","けども"]
+    if word in exclusionList:
+        return True
+    else:
+        return False
+
 # directionsApiOfGoogleMap
 @app.route('/directionsApiOfGoogleMap', methods=["GET"])
 def openWindowDirectionsApiOfGoogleMap():
@@ -149,13 +218,6 @@ def modifiedExcelDownload():
     files.save('tmp/' + filename)
 
     wb = openpyxl.load_workbook('tmp/' + filename)
-
-
-    # shidx = 0
-    # for sh in wb:
-    #     wb[sh.title].title = str(random.randint(1, 9999999999999999)) + str(shidx)  #request.form["sheetName" + str(idx)] #"test" + str(shidx)
-    #     shidx = shidx + 1
-
 
     shidx = 0
     for sh in wb:
@@ -552,6 +614,23 @@ def decimal_default_proc(obj):
 def openWindowScrapeAndMining():
     return render_template("scrapeAndMining.haml")
 
+def insWeblogArticle(id, text):
+    try:
+        WeblogArticle.query.filter(
+            WeblogArticle.article_id==id
+        ).delete()
+
+        weblogArticle = WeblogArticle()
+        weblogArticle.article_id = id
+        weblogArticle.text_body = text
+        db.session.add(weblogArticle)
+        
+        # データを確定
+        db.session.commit()
+    except:
+        pass
+
+    return "1"
 
 @app.route('/getMiningResult/<id>')
 def getMiningResult(id):
@@ -560,15 +639,10 @@ def getMiningResult(id):
     soup = BeautifulSoup(res.text, 'html.parser')
     c_word = ""
     if soup.find(class_="post-full post-full-summary") is not None:
-    #     title_text = soup.find(class_='entry-title').get_text()
         body_text = soup.find(class_='entry-content').get_text()
-        #     cate_text = soup.find(class_='cat-links').get_text()
-        #     date_text = ""
-        #     if soup.find(class_='entry-date') is not None:
-        #       date_text = formatDate(soup.find(class_='entry-date').get_text())
-
         #     # 文字の整形（改行削除）
         text = "".join(body_text.splitlines())
+
 
         # 単語ごとに抽出
         docs=[]
@@ -579,6 +653,9 @@ def getMiningResult(id):
                 docs.append(token.surface)
         
         c_word = ' '.join(docs)
+
+        insWeblogArticle(id, c_word)
+
     
     dictId = {}
     dictId['aaData']=[]
