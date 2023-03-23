@@ -156,9 +156,9 @@ def getCoOccurrenceNetworkImage():
     timestampStr = timestamp.strftime('%Y%m%d%H%M%S%f')
     filename = getRandomKey() + ".png"
     #filename = "wordcloud_" + timestampStr + "_" + kijiId + ".png"
-    filepath = "./static/image/" + filename
+    filepath = "./tmp/" + filename
     wordcloud.to_file(filepath)
-    imgPath = 'static/image/' + filename
+    imgPath = 'tmp/' + filename
     return send_file(imgPath, as_attachment=True, mimetype='image/png', attachment_filename = filename)
 
 def isExclusion(word):
