@@ -84,6 +84,7 @@ GOOGLE_DISCOVERY_URL = (
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
+mapDirectionsApiKey = os.environ.get("MAP_DIRECTIONS_API_KEY") #os.environ["OPENAI_API_KEY"]
 
 
 
@@ -190,7 +191,7 @@ def openWindowDirectionsApiOfGoogleMap():
 
 @app.route('/getDirectionP2Pinfo/<pointA>/<pointB>', methods=["GET"])
 def getDirectionP2Pinfo(pointA, pointB):
-    res = requests.get("https://maps.googleapis.com/maps/api/directions/json?origin=" + pointA + "&destination=" + pointB + "&mode=walking&key=AIzaSyAfiGfH6P_MWaNcaTtK07mQTLSpkPsQmGQ")
+    res = requests.get("https://maps.googleapis.com/maps/api/directions/json?origin=" + pointA + "&destination=" + pointB + "&mode=walking&key=" + mapDirectionsApiKey)
     return json.dumps(res.text, skipkeys=True, ensure_ascii=False)
 
 
