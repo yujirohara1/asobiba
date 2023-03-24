@@ -1,0 +1,35 @@
+{% extends 'common.html' %}
+ 
+{% block title %} Kiyonagi Sandbox {% endblock %}
+
+{% block content %}
+%div.container-fluid
+  %div.row
+    %div.col-auto
+      NewsAPIを試す
+  %hr
+  %div.row(style="margin-bottom:14px")
+    %div.col-auto
+      今日のヘッドライン
+    %div.col-auto
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioCountryUS(type="radio" name="radioCountry" value="us_en")
+        %label.form-check-label(for="radioCountryUS")
+          us
+      %div.form-check.form-check-inline
+        %input.form-check-input#radioCountryJP(type="radio" name="radioCountry" value="jp_None")
+        %label.form-check-label(for="radioCountryJP")
+          jp
+    %div.col-auto
+      ※日本のニュースソースはurlToImageがnullで面白みがない。
+  %div#divHeadLine
+
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="../static/main/js/newsApi.js"></script>
+
+{% endblock  %}
+
+

@@ -66,3 +66,10 @@ document.getElementById("linkCoOccurrenceNetwork").addEventListener('click', fun
 
 
 
+
+document.getElementById("linkNewsApi").addEventListener('click', function(){
+  window.open('/newsApi');
+});
+
+
+

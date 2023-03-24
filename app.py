@@ -55,6 +55,8 @@ import pkg_resources
 import pandas as pd
 import openpyxl
 
+from newsapi import NewsApiClient
+
 # import MeCab
 # import matplotlib.pyplot as plt
 # import re
@@ -84,7 +86,8 @@ GOOGLE_DISCOVERY_URL = (
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY") #os.environ["OPENAI_API_KEY"]
-mapDirectionsApiKey = os.environ.get("MAP_DIRECTIONS_API_KEY") #os.environ["OPENAI_API_KEY"]
+mapDirectionsApiKey = os.environ.get("MAP_DIRECTIONS_API_KEY") 
+newsApiKey = os.environ.get("NEWS_API_KEY") 
 
 
 
@@ -118,6 +121,54 @@ users = {}
 
 
 
+
+
+
+
+# coOccurrenceNetwork
+@app.route('/newsApi', methods=["GET"])
+def openWindowNewsApi():
+    # url = 'https://newsapi.org/v2/everything'
+    # params = {
+    #     'q': 'コロナウイルス AND ワクチン',
+    #     'sortBy': 'publishedAt',
+    #     'pageSize': 100
+    # }
+
+    # response = requests.get(url, headers=headers, params=params)
+    # print(response.json())
+
+    # return render_template("newsApi.haml")
+    # # Init
+    # newsapi = NewsApiClient(api_key=newsApiKey)
+
+    # # /v2/top-headlines
+    # top_headlines = newsapi.get_top_headlines(
+    #                                         country='jp',
+    #                                         language=None)
+
+    # # /v2/everything
+    # all_articles = newsapi.get_everything(q='コロナ',
+    #                                     from_param='2023-03-14',
+    #                                     to='2023-03-24',
+    #                                     language=None,
+    #                                     sort_by='relevancy')
+
+    # # /v2/top-headlines/sources
+    # sources = newsapi.get_sources()
+
+    return render_template("newsApi.haml")
+
+
+@app.route('/getHeadlines/<country>/<language>', methods=["GET"])
+def getHeadlines(country, language):
+    
+    if language=='None':
+        language = None
+
+    newsapi = NewsApiClient(api_key=newsApiKey)
+    top_headlines = newsapi.get_top_headlines(country=country, language=language)
+    return json.dumps(top_headlines, skipkeys=True, ensure_ascii=False)
 
 
 

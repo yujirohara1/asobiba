@@ -31,8 +31,8 @@ wordcloud==1.8.1
 xlrd==2.0.1
 requests==2.25.1
 Janome==0.4.1
-openpyxl==3.0.9
 python-redmine==2.3.0
+openpyxl==3.0.9
 google-api-core==2.11.0
 google-api-python-client==2.76.0
 google-auth==2.16.0
@@ -43,3 +43,4 @@ openai==0.27.2
 oauthlib==3.2.2
 opencv-python--headless==4.7.0.72
 matplotlib==3.4.3
+newsapi-python==0.2.7
