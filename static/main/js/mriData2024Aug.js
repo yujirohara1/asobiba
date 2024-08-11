@@ -785,6 +785,8 @@ window.onload = function(){
     option.title
     seriesObj.appendChild(option);
   }
+
+  
   return;
 }
 
@@ -793,6 +795,15 @@ seriesObj.addEventListener('change', function () {
   slider.min = 1;
   slider.max = imgNoMax;
   slider.value = 1;
+
+  
+  for (let i = 1; i <= imgNoMax; i++) {
+    var tmpFilmData = films.filter( ({ ser_no }) => ser_no == seriesObj.value ).filter( ({ img_no }) => img_no == i );
+    if (tmpFilmData.length == 1){
+      var img = new Image();
+      img.src = "../static/image/20240803MRI/" + tmpFilmData[0].img_name;
+    }
+  }
 
   var filmData = films.filter( ({ ser_no }) => ser_no == seriesObj.value ).filter( ({ img_no }) => img_no == slider.value );
   if (filmData.length == 1){
