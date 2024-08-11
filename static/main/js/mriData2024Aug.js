@@ -794,7 +794,7 @@ seriesObj.addEventListener('change', function () {
   imgNoMax = Math.max.apply(null,films.filter( ({ ser_no }) => ser_no == seriesObj.value ).map(function(o){return o.img_no;}))
   slider.min = 1;
   slider.max = imgNoMax;
-  slider.value = 1;
+  slider.value = imgNoMax/2;
 
   
   for (let i = 1; i <= imgNoMax; i++) {
@@ -810,7 +810,7 @@ seriesObj.addEventListener('change', function () {
     
     //imgArea.src = document.location.origin + "/static/image/20240803MRI/" + filmData[0].img_name;
     imgArea.src = "../static/image/20240803MRI/" + filmData[0].img_name;
-    imgNoLabel.innerText = 1 + "/" + imgNoMax;
+    imgNoLabel.innerText = slider.value + "/" + imgNoMax;
     sliderLabel.innerText = "スライダーでぬるぬる紙芝居します。";
     imgArea.style.visibility = "visible";
     slider.style.visibility = "visible";
@@ -823,7 +823,7 @@ seriesObj.addEventListener('change', function () {
 });
 
 imgArea.addEventListener('load', function () { 
-  slider.style.width = document.getElementById("filmArea").offsetWidth + "px";
+  slider.style.width = (document.getElementById("filmArea").offsetWidth/2) + "px";
 });
 
 slider.addEventListener('input', function () {
