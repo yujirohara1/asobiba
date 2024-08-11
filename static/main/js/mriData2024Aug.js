@@ -796,7 +796,9 @@ seriesObj.addEventListener('change', function () {
 
   var filmData = films.filter( ({ ser_no }) => ser_no == seriesObj.value ).filter( ({ img_no }) => img_no == slider.value );
   if (filmData.length == 1){
-    imgArea.src = document.location.origin + "/static/image/20240803MRI/" + filmData[0].img_name;
+    
+    //imgArea.src = document.location.origin + "/static/image/20240803MRI/" + filmData[0].img_name;
+    imgArea.src = "../static/image/20240803MRI/" + filmData[0].img_name;
     imgNoLabel.innerText = 1 + "/" + imgNoMax;
     sliderLabel.innerText = "スライダーでぬるぬる紙芝居します。";
     imgArea.style.visibility = "visible";
