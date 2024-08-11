@@ -606,3 +606,19 @@ table.dataTable thead tr {
     isolation: isolate; /* isolation がないと、背景色が考慮されてしまう */
     position: relative;
   }
+
+  
+@media (max-width: 991.98px) {
+    .custom-image {
+        width: 100% !important; /* 横幅いっぱいに拡大縮小 */
+        height: auto !important; /* 高さは自動調整 */
+    }
+}
+
+/* PC以上 */
+@media (min-width: 992px) {
+    .custom-image {
+        width: auto !important; /* 画像本来のサイズで表示 */
+        max-width: 100% !important; /* 画像が親要素を超えないように制限 */
+    }
+}
