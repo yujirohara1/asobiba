@@ -123,6 +123,15 @@ users = {}
 
 
 
+# coOccurrenceNetwork
+@app.route('/mriData2024Aug', methods=["GET"])
+def openWindowMriData2024Aug():
+    # url = 'https://newsapi.org/v2/everything'
+    # params = {
+    # sources = newsapi.get_sources()
+
+    return render_template("mriData2024Aug.haml")
+
 
 
 # coOccurrenceNetwork

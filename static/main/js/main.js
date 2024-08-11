@@ -69,7 +69,11 @@ document.getElementById("linkCoOccurrenceNetwork").addEventListener('click', fun
 
 document.getElementById("linkNewsApi").addEventListener('click', function(){
   window.open('/newsApi');
+
 });
 
 
+document.getElementById("linkMriData2024Aug").addEventListener('click', function(){
+  window.open('/mriData2024Aug');
 
+});
