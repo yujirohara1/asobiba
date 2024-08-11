@@ -10,14 +10,26 @@
   %hr
   %div.row(style="margin-bottom:14px")
     %div.col-auto
-      ああああ
-    %div.col-auto
-      ああああああああああああああああ
-    %div.col-auto
-      ※日ううううい。
-  %div#divHeadLine
-    <img src="../static/image/20240803MRI/J108a000.png" class="img-fluid" alt="...">
+      プルダウンでシリーズを選択してください。
 
+  %div.row
+    %div.col-auto
+      %select#selSeries.form-select.form-select-sm(aria-label=".form-select-sm")
+        %option(selected value="0")
+          シリーズを選択
+    %div.col-auto
+      %div#imgNoLabel
+
+  %hr
+  %div.row
+    %div.col-auto
+      %div#sliderLabel
+  %div.row
+    %div.col-auto
+      %input.form-range#fileSlider(type="range")
+  %div.row
+    %div.col-auto
+      %img.img-thumbnail#filmArea(src="", style="width:auto; height:auto;max-width:100%")
 
 {% endblock %}
 
